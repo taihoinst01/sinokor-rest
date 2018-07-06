@@ -23,7 +23,9 @@ app.use('/', index);
 app.use('/ocr', ocr);
 app.use('/ml', ml);
 
-var server = app.listen(3001, function () {
+app.set('port', process.env.PORT || 3001);
+
+var server = app.listen(app.get('port'), function () {
     console.log('DMZ server listening on port ' + server.address().port);
 });
 
