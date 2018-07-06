@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var commMoudle = require('./public/js/common/import.js');
+var commMoudle = require(require('app-root-path').path + '\\public\\js\\common\\import.js');
 var multer = require('multer');
 var request = require('request');
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var commMoudle = require('./public/js/common/import.js');
+var commMoudle = require(require('app-root-path').path + '\\public\\js\\common\\import.js');
 var pythonShell = require('python-shell');
 var csvWriter = require('csv-write-stream');
 
