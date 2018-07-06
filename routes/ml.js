@@ -17,7 +17,7 @@ router.post('/api', function (req, res) {
     var options = {
         mode: 'json',
         encoding: 'utf8',
-        pythonPath: '',
+        pythonPath: 'D:\\home\\python354x64\\python.exe',
         pythonOptions: ['-u'],
         scriptPath: require('app-root-path').path + '\\ml',
         args: fvParams
