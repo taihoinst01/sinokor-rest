@@ -11,6 +11,7 @@ router.get('/favicon.ico', function (req, res) {
 });
 
 router.post('/api', function (req, res) {
+    commMoudle.addLogging(req, JSON.stringify(req.body.data));
     var fvParams = req.body.data;
 
     // 고정가변 분류 알고리즘
@@ -39,6 +40,7 @@ router.post('/api', function (req, res) {
 
 // 학습파일(.csv) 데이터 추가
 router.post('/train', function (req, res) {
+    commMoudle.addLogging(req, JSON.stringify(req.body.data));
     var trainData = req.body.data;
 
     var csvPath = require('app-root-path').path + '\\uploads\\trainData\\httpTest.csv';

@@ -23,6 +23,7 @@ router.get('/favicon.ico', function (req, res) {
 
 // file upload & OCR API
 router.post('/api', upload.any(), function (req, res) {
+    commMoudle.addLogging(req, JSON.stringify(req.files[0]));
     var f = req.files[0];
 
     if (f) {
