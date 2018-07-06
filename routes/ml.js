@@ -39,12 +39,8 @@ router.post('/api', function (req, res) {
 
 // 학습파일(.csv) 데이터 추가
 router.post('/train', function (req, res) {
-    //var fvParams = req.body.data;
-    var trainData = [
-        '1::1::test::TRUE',
-        '12::12::안녕::TRUE',
-        '123::123::test2::FALSE'
-    ];
+    var fvParams = req.body.data;
+
     var csvPath = require('app-root-path').path + '\\uploads\\trainData\\httpTest.csv';
     var writer = csvWriter();
 
