@@ -8,7 +8,7 @@ for item in sys.argv[1:]:
 
 data = {
         "Inputs": {
-                "input": param
+                "input1": param
         },
     "GlobalParameters":  {
     }

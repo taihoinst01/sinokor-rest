@@ -17,7 +17,7 @@ router.post('/api', function (req, res) {
     var options = {
         mode: 'json',
         encoding: 'utf8',
-        pythonPath: 'D:\\home\\python354x64\\python.exe',
+        pythonPath: '',
         pythonOptions: ['-u'],
         scriptPath: require('app-root-path').path + '\\ml',
         args: fvParams
@@ -29,7 +29,7 @@ router.post('/api', function (req, res) {
         } else {
             results[0] = results[0].replace(/Scored Labels/gi, 'ScoredLabels');
             results[0] = results[0].replace(/Scored Probabilities/gi, 'ScoredProbabilities');
-            var fvResult = JSON.parse(results[0]).Results.output;
+            var fvResult = JSON.parse(results[0]).Results.output1;
 
             res.send({ code: 200, result: fvResult });
         }
