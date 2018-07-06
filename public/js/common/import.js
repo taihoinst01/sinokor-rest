@@ -15,7 +15,7 @@ log4js.configure({
             pattern: "-yyyy-MM-dd",
             layout: {
                 type: 'pattern',
-                pattern: '[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %X{url} : %m'
+                pattern: '[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %X{url} - %m'
             }
         }
     },
