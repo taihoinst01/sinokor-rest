@@ -50,6 +50,7 @@ router.post('/api', upload.any(), function (req, res) {
                 if ((JSON.parse(body)).code) { // ocr api error
                     res.send({ code: (JSON.parse(body)).code, message: (JSON.parse(body)).message });
                 } else { // 성공
+                    commMoudle.addLogging(req, 'Ocr Api Call Success.');
                     res.send({ code: 200, result: body });
                 }
             }

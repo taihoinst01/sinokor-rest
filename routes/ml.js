@@ -32,6 +32,7 @@ router.post('/api', function (req, res) {
             results[0] = results[0].replace(/Scored Probabilities/gi, 'ScoredProbabilities');
             var fvResult = JSON.parse(results[0]).Results.output1;
 
+            commMoudle.addLogging(req, 'fixed or variable Classification Machine Learning Query Success.');
             res.send({ code: 200, result: fvResult });
         }
     });
@@ -61,6 +62,7 @@ router.post('/train', function (req, res) {
             isFixed: item[3]
         });
     }
+    commMoudle.addLogging(req, 'fixed or variable Classification Machine Learning ReTrain Success.')
     writer.end();
 
     res.send({});
