@@ -35,6 +35,7 @@
     <Compile Include="routes\index.js" />
     <Compile Include="routes\ml.js" />
     <Compile Include="routes\ocr.js" />
+    <Content Include="logs\log.txt" />
     <Content Include="ml\fvClassification.py" />
     <Content Include="package.json" />
     <Content Include="README.md" />
