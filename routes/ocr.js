@@ -79,7 +79,7 @@ router.post('/api', upload.any(), function (req, res) {
         });
        
     } else { // 파라미터 없으면
-        res.send({ code: 404, message: '요청 파일이 없습니다.' });
+        res.send({ error: '요청 파일이 없습니다.' });
     }
 
 });
