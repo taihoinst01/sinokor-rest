@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="config\propertiesConfig.js" />
     <Compile Include="public\js\common\import.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\ml.js" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <Folder Include="ml\" />
     <Folder Include="logs\" />
+    <Folder Include="config\" />
     <Folder Include="uploads\" />
     <Folder Include="public\" />
     <Folder Include="public\js\" />
