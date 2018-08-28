@@ -41,31 +41,37 @@ router.post('/api', function (req, res) {
 
 // 학습파일(.csv) 데이터 추가
 router.post('/train', function (req, res) {
-    commMoudle.addLogging(req, JSON.stringify(req.body.data));
-    var trainData = req.body.data;
+    commMoudle.addLogging(req, JSON.stringify(req.body));
+    var flmdata = req.body.flmdata;
+	var fmData = req.body.fmData;
+	var cmData = req.body.cmData;
+	var dataArr = [flmdata, fmData, cmData];
+	var csvPathArr = ['formLabelMapping.csv','formMapping.csv','columnMapping.csv'];
+	
+	for(var i in dataArr){
+		var trainData = dataArr[i];
+		
+		var csvPath = require('app-root-path').path + '\\uploads\\trainData\\' + csvPathArr[i];
+		var writer = csvWriter();
 
-    var csvPath = require('app-root-path').path + '\\uploads\\trainData\\httpTest.csv';
-    var writer = csvWriter();
+		if (!commMoudle.fs.existsSync(csvPath)){
+			writer = csvWriter({ headers: ['DATA', 'CLASS'] });
+		} else {
+			writer = csvWriter({ sendHeaders: false });
+		}
+		writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'a' }));
+		for (var i = 0; i < trainData.length; i++) {
+			var item = trainData[i];
+			writer.write({
+				DATA: "'" + item.data.replace(/,/g,"','") + "'",
+				CLASS: item.class
+			});
+		}
+		commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
+		writer.end();
+	}
 
-    if (!commMoudle.fs.existsSync(csvPath)){
-        writer = csvWriter({ headers: ['x', 'y', 'text', 'isFixed'] });
-    } else {
-        writer = csvWriter({ sendHeaders: false });
-    }
-    writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'a' }));
-    for (var i = 0; i < trainData.length; i++) {
-        var item = trainData[i].split('::');
-        writer.write({
-            x: item[0],
-            y: item[1],
-            text: item[2],
-            isFixed: item[3]
-        });
-    }
-    commMoudle.addLogging(req, 'fixed or variable Classification Machine Learning ReTrain Success.')
-    writer.end();
-
-    res.send({});
+    res.send({ code: 200, message: 'Machine Learning ReTrain Success.' });
 });
 
 module.exports = router;
