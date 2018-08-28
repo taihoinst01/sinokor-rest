@@ -37,6 +37,7 @@
     <Compile Include="routes\ml.js" />
     <Compile Include="routes\ocr.js" />
     <Content Include="logs\log.txt" />
+    <Content Include="ml\columnMapping.py" />
     <Content Include="ml\formMapping.py" />
     <Content Include="ml\formLabelMapping.py" />
     <Content Include="ml\fvClassification.py" />
