@@ -32,9 +32,9 @@ router.post('/api', function (req, res) {
 
                 for (var i in data) {
                     if (data[i].formLabel == 0) {
-                        ogCompany.push(data[i].text);
+                        ogCompany.push(data[i].sid);
                     } else if (data[i].formLabel == 1) {
-                        ctnm.push(data[i].text);
+                        ctnm.push(data[i].sid);
                     }
                 }
 
