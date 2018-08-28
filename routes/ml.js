@@ -47,31 +47,35 @@ router.post('/train', function (req, res) {
 	var cmData = req.body.cmData;
 	var dataArr = [flmdata, fmData, cmData];
 	var csvPathArr = ['formLabelMapping.csv','formMapping.csv','columnMapping.csv'];
-	
-	for(var i in dataArr){
-		var trainData = dataArr[i];
-		
-		var csvPath = require('app-root-path').path + '\\uploads\\trainData\\' + csvPathArr[i];
-		var writer = csvWriter();
 
-		if (!commMoudle.fs.existsSync(csvPath)){
-			writer = csvWriter({ headers: ['DATA', 'CLASS'] });
-		} else {
-			writer = csvWriter({ sendHeaders: false });
-		}
-		writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'a' }));
-		for (var i = 0; i < trainData.length; i++) {
-			var item = trainData[i];
-			writer.write({
-				DATA: "'" + item.data.replace(/,/g,"','") + "'",
-				CLASS: item.class
-			});
-		}
-		commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
-		writer.end();
-	}
+    try {
+        for (var i in dataArr) {
+            var trainData = dataArr[i];
 
-    res.send({ code: 200, message: 'Machine Learning ReTrain Success.' });
+            var csvPath = require('app-root-path').path + '\\uploads\\trainData\\' + csvPathArr[i];
+            var writer = csvWriter();
+
+            if (!commMoudle.fs.existsSync(csvPath)) {
+                writer = csvWriter({ headers: ['DATA', 'CLASS'] });
+            } else {
+                writer = csvWriter({ sendHeaders: false });
+            }
+            writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'a' }));
+            for (var i = 0; i < trainData.length; i++) {
+                var item = trainData[i];
+                writer.write({
+                    DATA: "'" + item.data.replace(/,/g, "','") + "'",
+                    CLASS: item.class
+                });
+            }
+            commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
+            writer.end();
+        }
+
+        res.send({ code: 200, message: 'Machine Learning ReTrain Success.' });
+    } catch (e) {
+        res.send({ code: 500, message: e });
+    }
 });
 
 module.exports = router;
