@@ -56,15 +56,17 @@ router.post('/api', function (req, res) {
             }
         } else if (type == 'columnMapping') {
             targetPy = 'columnMapping.py';
+			
             for (var i in data) {
                 if (!data[i].colLbl) {
                     param.push({ DATA: "'" + req.body.data.docCategory.DOCTYPE + "','" + data[i].sid.replace(/,/g, "','") + "'", CLASS: 0 });
-                } else {
+				} else {
                     data[i].colAccu = 0.99;
                 }
             }
         }
         if (isRun && param.length != 0) {
+			
             //Azure WebApp
             var options = {
                 mode: 'json',
@@ -74,8 +76,7 @@ router.post('/api', function (req, res) {
                 scriptPath: require('app-root-path').path + '\\ml',
                 args: [JSON.stringify(param)]
             };
-
-            /*
+			/*
             var options = {
                 mode: 'json',
                 encoding: 'utf8',
@@ -94,14 +95,17 @@ router.post('/api', function (req, res) {
                     results[0] = results[0].replace(/Scored Labels/gi, 'ScoredLabels');
                     results[0] = results[0].replace(/Scored Probabilities/gi, 'ScoredProbabilities');
                     var outResult = JSON.parse(results[0]).Results.output1;
-
+					
                     if (type == 'formLabelMapping') {
                         for (var i in outResult) {
-                            if (req.body.data.data[i].sid == outResult[i].DATA.replace(/'/g, '')) {
-                                if (!req.body.data.data[i].formLabel) {
-                                    req.body.data.data[i].formLabel = outResult[i].ScoredLabels;
-                                }
-                            }
+							for(var j in req.body.data.data){
+								if (req.body.data.data[j].sid == outResult[i].DATA.replace(/\'/g, '')) {
+									if (!req.body.data.data[j].formLabel) {
+										req.body.data.data[j].formLabel = outResult[i].ScoredLabels;
+										break;
+									}
+								}
+							}
                         }
                     } else if (type == 'formMapping') {
                         var docNum = 0;
@@ -115,12 +119,15 @@ router.post('/api', function (req, res) {
                         req.body.data.docCategory = { DOCTYPE: docNum, Score: docScore };
                     } else if (type == 'columnMapping') {
                         for (var i in outResult) {
-                            if (req.body.data.docCategory.DOCTYPE + ',' + req.body.data.data[i].sid == outResult[i].DATA.replace(/'/g, '')) {
-                                if (!req.body.data.data[i].colLbl) {
-                                    req.body.data.data[i].colLbl = outResult[i].ScoredLabels;
-                                    req.body.data.data[i].colAccu = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
-                                }
-                            }
+							for(var j in req.body.data.data){
+								if (req.body.data.docCategory.DOCTYPE + ',' + req.body.data.data[j].sid == outResult[i].DATA.replace(/\'/g, '')) {
+									if (!req.body.data.data[j].colLbl) {
+										req.body.data.data[j].colLbl = outResult[i].ScoredLabels;
+										req.body.data.data[j].colAccu = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
+										break;
+									}
+								}
+							}
                         }
                     }
                     commMoudle.addLogging(req, type + ' Machine Learning Query Success.');
