@@ -59,14 +59,15 @@ router.post('/api', function (req, res) {
 			
             for (var i in data) {
                 if (!data[i].colLbl) {
-                    param.push({ DATA: "'" + req.body.data.docCategory.DOCTYPE + "','" + data[i].sid.replace(/,/g, "','") + "'", CLASS: 0 });
+                    param.push({ DATA: "'" + data[i].sid.replace(/,/g, "','") + "'", CLASS: 0 });
+                    //param.push({ DATA: "'" + req.body.data.docCategory.DOCTYPE + "','" + data[i].sid.replace(/,/g, "','") + "'", CLASS: 0 });
 				} else {
                     data[i].colAccu = 0.99;
                 }
             }
         }
         if (isRun && param.length != 0) {
-			
+			/*
             //Azure WebApp
             var options = {
                 mode: 'json',
@@ -76,7 +77,7 @@ router.post('/api', function (req, res) {
                 scriptPath: require('app-root-path').path + '\\ml',
                 args: [JSON.stringify(param)]
             };
-			/*
+			*/
             var options = {
                 mode: 'json',
                 encoding: 'utf8',
@@ -85,7 +86,7 @@ router.post('/api', function (req, res) {
                 scriptPath: require('app-root-path').path + '\\ml',
                 args: [JSON.stringify(param)]
             };
-            */
+            
 
             pythonShell.run(targetPy, options, function (err, results) {
                 if (err) {
@@ -156,25 +157,26 @@ router.post('/train', function (req, res) {
     try {
         for (var i in dataArr) {
             var trainData = dataArr[i];
+			if(trainData.length != 0){
+				var csvPath = require('app-root-path').path + '\\uploads\\trainData\\' + csvPathArr[i];
+				var writer = csvWriter();
 
-            var csvPath = require('app-root-path').path + '\\uploads\\trainData\\' + csvPathArr[i];
-            var writer = csvWriter();
-
-            if (!commMoudle.fs.existsSync(csvPath)) {
-                writer = csvWriter({ headers: ['DATA', 'CLASS'] });
-            } else {
-                writer = csvWriter({ sendHeaders: false });
-            }
-            writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'a' }));
-            for (var i = 0; i < trainData.length; i++) {
-                var item = trainData[i];
-                writer.write({
-                    DATA: "'" + item.data.replace(/,/g, "','") + "'",
-                    CLASS: item.class
-                });
-            }
-            commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
-            writer.end();
+				if (!commMoudle.fs.existsSync(csvPath)) {
+					writer = csvWriter({ headers: ['DATA', 'CLASS'] });
+				} else {
+					writer = csvWriter({ sendHeaders: false });
+				}
+				writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'a' }));
+				for (var i = 0; i < trainData.length; i++) {
+					var item = trainData[i];
+					writer.write({
+						DATA: "'" + item.data.replace(/,/g, "','") + "'",
+						CLASS: item.class
+					});
+				}
+				commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
+				writer.end();
+			}
         }
 
         res.send({ code: 200, message: 'Machine Learning ReTrain Success.' });
