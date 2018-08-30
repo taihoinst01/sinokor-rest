@@ -121,6 +121,14 @@ router.post('/api', function (req, res) {
                     } else if (type == 'columnMapping') {
                         for (var i in outResult) {
 							for(var j in req.body.data.data){
+								if (req.body.data.data[j].sid == outResult[i].DATA.replace(/\'/g, '')) {
+									if (!req.body.data.data[j].colLbl) {
+										req.body.data.data[j].colLbl = outResult[i].ScoredLabels;
+										req.body.data.data[j].colAccu = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
+										break;
+									}
+								}
+								/*
 								if (req.body.data.docCategory.DOCTYPE + ',' + req.body.data.data[j].sid == outResult[i].DATA.replace(/\'/g, '')) {
 									if (!req.body.data.data[j].colLbl) {
 										req.body.data.data[j].colLbl = outResult[i].ScoredLabels;
@@ -128,6 +136,7 @@ router.post('/api', function (req, res) {
 										break;
 									}
 								}
+								*/
 							}
                         }
                     }
