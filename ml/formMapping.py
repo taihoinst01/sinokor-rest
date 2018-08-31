@@ -13,7 +13,7 @@ data = {
 body = str.encode(json.dumps(data))
 
 url = 'https://ussouthcentral.services.azureml.net/workspaces/df3c2edb78144329b9b5e02a6b6b39ff/services/a74dd4ba9ff04baeb81c1cacd919dca6/execute?api-version=2.0&format=swagger'
-api_key = '7jvIM9uW+Yzz/I/W1aqHHWrx0bShMcRkG9QnR/b6LwUdBEer9OVPi91TuhIFVTWdZHL2iNt0ncTbHQ9VRg99Sw=='
+api_key = 'pTUOjsoNwYEdtPaJfLYslYwMEfu6PL4ME6PhlFKa5H1pipLVLz2A2Qne/AJb94ecx9V1Fjb7FREb+PlTBgM3WQ=='
 headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
 
 req = urllib.request.Request(url, body, headers)

@@ -29,14 +29,16 @@ router.post('/api', function (req, res) {
         } else if (type == 'formMapping') {
             if (!req.body.data.docCategory) {
                 targetPy = 'formMapping.py';
-
+ 
+                param.push({ DATA1: data[0].text, DATA2: data[1].text, DATA3: data[2].text, DATA4: data[3].text, DATA5: data[4].text, CLASS: 0 })
+				/*
                 for (var i in data) {
                     if (data[i].formLabel == 0) {
                         ogCompany.push(data[i].sid);
                     } else if (data[i].formLabel == 1) {
                         ctnm.push(data[i].sid);
                     }
-                }
+                }				
 
                 if (ogCompany.length == 1 && ctnm.length == 1) {
                     param.push({ DATA: "'" + ogCompany[0].replace(/,/g, "','") + "','" + ctnm[0].replace(/,/g, "','") + "'", CLASS: 0 });
@@ -50,6 +52,7 @@ router.post('/api', function (req, res) {
                     }
                 }
                 param.push({ DATA: data[i].sid, CLASS: 0 });
+                */
             } else {
                 req.body.data.docCategory.score = 0.99;
                 isRun = false;
@@ -109,6 +112,7 @@ router.post('/api', function (req, res) {
 							}
                         }
                     } else if (type == 'formMapping') {
+                        
                         var docNum = 0;
                         var docScore = 0;
                         for (var i in outResult) {
@@ -117,7 +121,8 @@ router.post('/api', function (req, res) {
                                 docScore = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
                             }
                         }
-                        req.body.data.docCategory = { DOCTYPE: docNum, Score: docScore };
+                        req.body.data = { DOCTYPE: docNum, Score: docScore };
+                        //req.body.data.docCategory = { DOCTYPE: docNum, Score: docScore };
                     } else if (type == 'columnMapping') {
                         for (var i in outResult) {
 							for(var j in req.body.data.data){
