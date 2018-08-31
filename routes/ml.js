@@ -38,7 +38,7 @@ router.post('/api', function (req, res) {
                     } else if (data[i].formLabel == 1) {
                         ctnm.push(data[i].sid);
                     }
-                }				
+                }
 
                 if (ogCompany.length == 1 && ctnm.length == 1) {
                     param.push({ DATA: "'" + ogCompany[0].replace(/,/g, "','") + "','" + ctnm[0].replace(/,/g, "','") + "'", CLASS: 0 });
@@ -99,6 +99,7 @@ router.post('/api', function (req, res) {
                     results[0] = results[0].replace(/Scored Labels/gi, 'ScoredLabels');
                     results[0] = results[0].replace(/Scored Probabilities/gi, 'ScoredProbabilities');
                     var outResult = JSON.parse(results[0]).Results.output1;
+                    commMoudle.addLogging(req, JSON.stringify(outResult));
 					
                     if (type == 'formLabelMapping') {
                         for (var i in outResult) {
