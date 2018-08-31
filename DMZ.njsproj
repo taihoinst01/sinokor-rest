@@ -30,6 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="outapp.js" />
     <Compile Include="app.js" />
     <Compile Include="config\propertiesConfig.js" />
     <Compile Include="public\js\common\import.js" />
@@ -40,7 +41,6 @@
     <Content Include="ml\columnMapping.py" />
     <Content Include="ml\formMapping.py" />
     <Content Include="ml\formLabelMapping.py" />
-    <Content Include="ml\fvClassification.py" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
