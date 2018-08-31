@@ -33,7 +33,7 @@
     <Compile Include="outapp.js" />
     <Compile Include="app.js" />
     <Compile Include="config\propertiesConfig.js" />
-    <Compile Include="public\js\common\import.js" />
+    <Compile Include="public\nodejs\common\import.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\ml.js" />
     <Compile Include="routes\ocr.js" />
@@ -50,8 +50,8 @@
     <Folder Include="config\" />
     <Folder Include="uploads\" />
     <Folder Include="public\" />
-    <Folder Include="public\js\" />
-    <Folder Include="public\js\common\" />
+    <Folder Include="public\nodejs\" />
+    <Folder Include="public\nodejs\common\" />
     <Folder Include="routes\" />
     <Folder Include="uploads\trainData\" />
     <Folder Include="views\" />

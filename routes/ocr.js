@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 var appRootPath = require('app-root-path').path;
-var commMoudle = require(appRootPath + '\\public\\js\\common\\import.js');
+var commMoudle = require(appRootPath + '\\public\\nodejs\\common\\import.js');
 var multer = require('multer');
 var request = require('request');
 var propertiesConfig = require('../config/propertiesConfig.js');
@@ -63,23 +63,23 @@ router.post('/api', upload.any(), function (req, res) {
                                 }                              
                             } else { // request 시 에러이면
                                 console.log(reqErr);
-                                res.send({ error: '요청 에러가 발생했습니다.' });
+                                res.send({ error: 'ocr api request error' });
                             }
                         } else { // fs 파일 존재 여부(stat) 확인 할 때 에러이면
                             console.log(fsStatError);
-                            res.send({ error: 'proxy 파일 삭제 도중 오류 발생했습니다.' });
+                            res.send({ error: 'There was an error deleting the file.' });
                         }
                     });
                 });
 
             } else { // fs 파일 read 할 때 에러이면
                 console.log(fsReaderr);
-                res.send({ error: '파일이 없습니다.' });
+                res.send({ error: 'file Not found' });
             }            
         });
        
     } else { // 파라미터 없으면
-        res.send({ error: '요청 파일이 없습니다.' });
+        res.send({ error: 'parameter is empty' });
     }
 
 });

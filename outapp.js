@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var commMoudle = require(require('app-root-path').path + '\\public\\js\\common\\import.js');
+var commMoudle = require(require('app-root-path').path + '\\public\\nodejs\\common\\import.js');
 
 var app = commMoudle.express();
 

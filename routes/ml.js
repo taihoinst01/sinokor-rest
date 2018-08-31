@@ -12,7 +12,7 @@ router.get('/favicon.ico', function (req, res) {
 
 router.post('/api', function (req, res) {
     commMoudle.addLogging(req, JSON.stringify(req.body.data));
-    var data = req.body.data.data;
+    var data = req.body.data;
 	var type = req.body.type;
 	var param = [];
 	var targetPy = '';
@@ -121,7 +121,7 @@ router.post('/api', function (req, res) {
                                 docScore = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
                             }
                         }
-                        req.body.data = { DOCTYPE: docNum, Score: docScore };
+                        data = { DOCTYPE: docNum, SCORE: docScore };
                         //req.body.data.docCategory = { DOCTYPE: docNum, Score: docScore };
                     } else if (type == 'columnMapping') {
                         for (var i in outResult) {
@@ -146,15 +146,15 @@ router.post('/api', function (req, res) {
                         }
                     }
                     commMoudle.addLogging(req, type + ' Machine Learning Query Success.');
-                    res.send(req.body.data);
+                    res.send(data);
                 }
             });
         } else {
-            res.send(req.body.data);
+            res.send(data);
         }
     } catch (e) {
         console.log(e);
-        res.send(req.body.data);
+        res.send(data);
     }
 });
 
@@ -176,25 +176,44 @@ router.post('/train', function (req, res) {
 				var writer = csvWriter();
 
 				if (!commMoudle.fs.existsSync(csvPath)) {
-					writer = csvWriter({ headers: ['DATA', 'CLASS'] });
+					if(csvPathArr[i] == 'formMapping.csv'){
+						writer = csvWriter({ headers: ['DATA1', 'DATA2', 'DATA3', 'DATA4', 'DATA5', 'CLASS'] });
+					}else{
+						writer = csvWriter({ headers: ['DATA', 'CLASS'] });
+					}
 				} else {
 					writer = csvWriter({ sendHeaders: false });
 				}
 				writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'a' }));
-				for (var i = 0; i < trainData.length; i++) {
-					var item = trainData[i];
+				
+				if(csvPathArr[i] == 'formMapping.csv'){
 					writer.write({
-						DATA: "'" + item.data.replace(/,/g, "','") + "'",
-						CLASS: item.class
+						DATA1: trainData[0].text,
+						DATA2: trainData[1].text,
+						DATA3: trainData[2].text,
+						DATA4: trainData[3].text,
+						DATA5: trainData[4].text,
+						CLASS: "0"
 					});
-				}
-				commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
-				writer.end();
+				}else{
+					for (var i = 0; i < trainData.length; i++) {
+						var item = trainData[i];
+						
+						writer.write({
+							DATA: "'" + item.data.replace(/,/g, "','") + "'",
+							CLASS: item.class
+						});
+						
+					}
+				}				
+                writer.end();
+                commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
 			}
         }
 
         res.send({ code: 200, message: 'Machine Learning ReTrain Success.' });
     } catch (e) {
+        console.log(e);
         res.send({ code: 500, message: e });
     }
 });
