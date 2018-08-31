@@ -30,7 +30,7 @@ router.post('/api', function (req, res) {
             if (!req.body.data.docCategory) {
                 targetPy = 'formMapping.py';
  
-                param.push({ DATA1: data[0].text, DATA2: data[1].text, DATA3: data[2].text, DATA4: data[3].text, DATA5: data[4].text, CLASS: 0 })
+                param.push({ DATA1: data[0].text, DATA2: data[1].text, DATA3: data[2].text, DATA4: data[3].text, DATA5: data[4].text, CLASS: "0" })
 				/*
                 for (var i in data) {
                     if (data[i].formLabel == 0) {
