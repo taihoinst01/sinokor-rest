@@ -128,7 +128,7 @@ router.post('/api', function (req, res) {
 								if (data[j].sid == outResult[i].DATA.replace(/\'/g, '')) {
 									if (data[j].colLbl == 38) {
 										data[j].colLbl = outResult[i].ScoredLabels;
-										data[j].colAccu = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
+                                        data[j].colAccu = Number(Number(outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"']).toFixed(2));
 										break;
 									}
 								}
