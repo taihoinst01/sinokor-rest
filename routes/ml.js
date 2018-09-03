@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var commMoudle = require(require('app-root-path').path + '\\public\\js\\common\\import.js');
+var commMoudle = require(require('app-root-path').path + '\\public\\nodejs\\common\\import.js');
 var pythonShell = require('python-shell');
 var csvWriter = require('csv-write-stream');
 
@@ -11,8 +11,13 @@ router.get('/favicon.ico', function (req, res) {
 });
 
 router.post('/api', function (req, res) {
-    commMoudle.addLogging(req, JSON.stringify(req.body.data));
-    var data = req.body.data;
+    var data;
+    if (typeof req.body.data == 'string') {
+        data = JSON.parse(req.body.data);
+    } else {
+        data = req.body.data;
+    }
+    commMoudle.addLogging(req, JSON.stringify(req.body.data));   
 	var type = req.body.type;
 	var param = [];
 	var targetPy = '';
@@ -61,7 +66,7 @@ router.post('/api', function (req, res) {
             targetPy = 'columnMapping.py';
 			
             for (var i in data) {
-                if (!data[i].colLbl) {
+                if (data[i].colLbl == 38) {
                     param.push({ DATA: "'" + data[i].sid.replace(/,/g, "','") + "'", CLASS: 0 });
                     //param.push({ DATA: "'" + req.body.data.docCategory.DOCTYPE + "','" + data[i].sid.replace(/,/g, "','") + "'", CLASS: 0 });
 				} else {
@@ -126,11 +131,11 @@ router.post('/api', function (req, res) {
                         //req.body.data.docCategory = { DOCTYPE: docNum, Score: docScore };
                     } else if (type == 'columnMapping') {
                         for (var i in outResult) {
-							for(var j in req.body.data.data){
-								if (req.body.data.data[j].sid == outResult[i].DATA.replace(/\'/g, '')) {
-									if (!req.body.data.data[j].colLbl) {
-										req.body.data.data[j].colLbl = outResult[i].ScoredLabels;
-										req.body.data.data[j].colAccu = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
+							for(var j in data){
+								if (data[j].sid == outResult[i].DATA.replace(/\'/g, '')) {
+									if (data[j].colLbl == 38) {
+										data[j].colLbl = outResult[i].ScoredLabels;
+										data[j].colAccu = outResult[i]['ScoredProbabilities for Class "' + outResult[i].ScoredLabels + '"'];
 										break;
 									}
 								}
@@ -163,11 +168,18 @@ router.post('/api', function (req, res) {
 // 학습파일(.csv) 데이터 추가
 router.post('/train', function (req, res) {
     commMoudle.addLogging(req, JSON.stringify(req.body));
-    var flmdata = req.body.flmdata;
-	var fmData = req.body.fmData;
-	var cmData = req.body.cmData;
-	var dataArr = [flmdata, fmData, cmData];
-	var csvPathArr = ['formLabelMapping.csv','formMapping.csv','columnMapping.csv'];
+    //var flmdata = req.body.flmdata;
+	//var fmData = req.body.fmData;
+    var cmData;
+    if (typeof cmData == 'string') {
+        cmData = JSON.parse(req.body.cmData);
+    } else {
+        cmData = req.body.cmData;
+    }
+	//var dataArr = [flmdata, fmData, cmData];
+	var dataArr = [cmData]
+	//var csvPathArr = ['formLabelMapping.csv','formMapping.csv','columnMapping.csv'];
+	var csvPathArr = ['columnMapping.csv'];
 
     try {
         for (var i in dataArr) {
