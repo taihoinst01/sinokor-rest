@@ -30,6 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="config\pythonConfig.js" />
     <Compile Include="outapp.js" />
     <Compile Include="app.js" />
     <Compile Include="config\propertiesConfig.js" />

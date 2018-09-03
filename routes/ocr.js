@@ -29,61 +29,57 @@ router.post('/api', upload.any(), function (req, res) {
     commMoudle.addLogging(req, JSON.stringify(req.files[0]));
     var f = req.files[0];
 
-    try {
-        if (f) {
-            var targetFilePath = './uploads/' + f.originalname;
+    if (f) {
+        var targetFilePath = './uploads/' + f.originalname;
 
-            fs.readFile(targetFilePath, function (fsReaderr, data) {
-                if (!fsReaderr) {
-                    var base64 = new Buffer(data, 'binary').toString('base64');
-                    var binaryString = new Buffer(base64, 'base64').toString('binary');
-                    var buffer = new Buffer(binaryString, "binary");
-                    var params = {
-                        'language': 'unk',
-                        'detectOrientation': 'true'
-                    };
+        fs.readFile(targetFilePath, function (fsReaderr, data) {
+            if (!fsReaderr) {
+                var base64 = new Buffer(data, 'binary').toString('base64');
+                var binaryString = new Buffer(base64, 'base64').toString('binary');
+                var buffer = new Buffer(binaryString, "binary");
+                var params = {
+                    'language': 'unk',
+                    'detectOrientation': 'true'
+                };
 
-                    request({
-                        headers: {
-                            'Ocp-Apim-Subscription-Key': propertiesConfig.ocr.subscriptionKey,
-                            'Content-Type': 'application/octet-stream'
-                        },
-                        uri: propertiesConfig.ocr.uri + '?' + 'language=' + params.language + '&detectOrientation=' + params.detectOrientation,
-                        body: buffer,
-                        method: 'POST'
-                    }, function (reqErr, response, body) {
-                        fs.stat(targetFilePath, function (fsStatError, stat) {
-                            if (!fsStatError) {
-                                fs.unlinkSync(targetFilePath); // 파일 삭제
-                                if (!reqErr) {
-                                    if (!((JSON.parse(body)).code)) { // OCR 응답 성공                   
-                                        res.send(body);
-                                    } else { // ocr api 호출시 에러이면  
-                                        res.send({ code: (JSON.parse(body)).code, message: (JSON.parse(body)).message });
-                                    }
-                                } else { // request 시 에러이면
-                                    console.log(reqErr);
-                                    res.send({ code: 500, error: 'ocr api request error' });
+                request({
+                    headers: {
+                        'Ocp-Apim-Subscription-Key': propertiesConfig.ocr.subscriptionKey,
+                        'Content-Type': 'application/octet-stream'
+                    },
+                    uri: propertiesConfig.ocr.uri + '?' + 'language=' + params.language + '&detectOrientation=' + params.detectOrientation,
+                    body: buffer,
+                    method: 'POST'
+                }, function (reqErr, response, body) {
+                    fs.stat(targetFilePath, function (fsStatError, stat) {
+                        if (!fsStatError) {
+                            fs.unlinkSync(targetFilePath); // upload file delete
+                            if (!reqErr) {
+                                if (!((JSON.parse(body)).code)) { // ocr api response success                  
+                                    res.send(body);
+                                } else { // ocr api request error
+                                    console.log(body);
+                                    res.send({ code: (JSON.parse(body)).code, message: (JSON.parse(body)).message });
                                 }
-                            } else { // fs 파일 존재 여부(stat) 확인 할 때 에러이면
-                                console.log(fsStatError);
-                                res.send({ code:500, error: 'There was an error deleting the file.' });
+                            } else { // request module error
+                                console.log(reqErr);
+                                res.send({ code: 500, error: 'ocr api request error' });
                             }
-                        });
+                        } else { // fs stat error
+                            console.log(fsStatError);
+                            res.send({ code:500, error: 'There was an error deleting the file.' });
+                        }
                     });
+                });
 
-                } else { // fs 파일 read 할 때 에러이면
-                    console.log(fsReaderr);
-                    res.send({ code:404, error: 'file Not found' });
-                }
-            });
+            } else { // fs read error
+                console.log(fsReaderr);
+                res.send({ code:404, error: 'file Not found' });
+            }
+        });
 
-        } else { // 파라미터 없으면
-            res.send({ code:400, error: 'parameter is empty' });
-        }
-    } catch (e) {
-        console.log(e);
-        res.send({ code:500, error: 'server error' });
+    } else { // parameter is null
+        res.send({ code:400, error: 'parameter is empty' });
     }
 
 });

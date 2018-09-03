@@ -9,7 +9,8 @@ router.get('/favicon.ico', function (req, res) {
 
 // home
 router.get('/', function (req, res) {
-    res.render('index');
+    res.end();
+    //res.render('index');
 });
 
 module.exports = router;

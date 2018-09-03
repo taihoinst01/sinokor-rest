@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 var commMoudle = require(require('app-root-path').path + '\\public\\nodejs\\common\\import.js');
+var pythonConfig = require(require('app-root-path').path + '\\config\\pythonConfig.js');
 var pythonShell = require('python-shell');
 var csvWriter = require('csv-write-stream');
 
@@ -86,17 +87,9 @@ router.post('/api', function (req, res) {
                 args: [JSON.stringify(param)]
             };
 			*/
-            var options = {
-                mode: 'json',
-                encoding: 'utf8',
-                pythonPath: '',
-                pythonOptions: ['-u'],
-                scriptPath: require('app-root-path').path + '\\ml',
-                args: [JSON.stringify(param)]
-            };
             
-
-            pythonShell.run(targetPy, options, function (err, results) {
+            pythonConfig.columnOptions.args = [JSON.stringify(param)];
+            pythonShell.run(targetPy, pythonConfig.columnOptions, function (err, results) {
                 if (err) {
                     console.log(err);
                     res.send({ code: 500, message: err });
@@ -171,7 +164,7 @@ router.post('/train', function (req, res) {
     //var flmdata = req.body.flmdata;
 	//var fmData = req.body.fmData;
     var cmData;
-    if (typeof cmData == 'string') {
+    if (typeof req.body.cmData == 'string') {
         cmData = JSON.parse(req.body.cmData);
     } else {
         cmData = req.body.cmData;
@@ -211,7 +204,6 @@ router.post('/train', function (req, res) {
 				}else{
 					for (var i = 0; i < trainData.length; i++) {
 						var item = trainData[i];
-						
 						writer.write({
 							DATA: "'" + item.data.replace(/,/g, "','") + "'",
 							CLASS: item.class

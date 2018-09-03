@@ -10,6 +10,8 @@ app.use(commMoudle.bodyParser.urlencoded({ extended: false }));
 app.use(commMoudle.cookieParser());
 app.use('/uploads', commMoudle.express.static(__dirname + '/uploads'));
 
+app.use('/', index);
+
 app.set('port', process.env.PORT || 80);
 
 var server = app.listen(app.get('port'), function () {
