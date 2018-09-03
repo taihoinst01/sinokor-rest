@@ -63,27 +63,27 @@ router.post('/api', upload.any(), function (req, res) {
                                     }
                                 } else { // request 시 에러이면
                                     console.log(reqErr);
-                                    res.send({ error: 'ocr api request error' });
+                                    res.send({ code: 500, error: 'ocr api request error' });
                                 }
                             } else { // fs 파일 존재 여부(stat) 확인 할 때 에러이면
                                 console.log(fsStatError);
-                                res.send({ error: 'There was an error deleting the file.' });
+                                res.send({ code:500, error: 'There was an error deleting the file.' });
                             }
                         });
                     });
 
                 } else { // fs 파일 read 할 때 에러이면
                     console.log(fsReaderr);
-                    res.send({ error: 'file Not found' });
+                    res.send({ code:404, error: 'file Not found' });
                 }
             });
 
         } else { // 파라미터 없으면
-            res.send({ error: 'parameter is empty' });
+            res.send({ code:400, error: 'parameter is empty' });
         }
     } catch (e) {
         console.log(e);
-        res.send({ error: 'server error' });
+        res.send({ code:500, error: 'server error' });
     }
 
 });
