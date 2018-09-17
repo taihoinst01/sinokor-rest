@@ -12,8 +12,8 @@ data = {
 
 body = str.encode(json.dumps(data))
 
-url = 'https://ussouthcentral.services.azureml.net/workspaces/df3c2edb78144329b9b5e02a6b6b39ff/services/aef5aa5d3e5d4c2cbe294753ccb7eed5/execute?api-version=2.0&format=swagger'
-api_key = 'cxgJYLwWV6SHguY5Hz93PtgwWcgoEn+orJWyS19V8cysYHV/daYxWNBQVv0xeuW8lje20xGC2bKGAdnb9KsuvQ=='
+url = 'https://ussouthcentral.services.azureml.net/workspaces/df3c2edb78144329b9b5e02a6b6b39ff/services/ed0dab8c1b7849a5ad2ab18f8eb110ff/execute?api-version=2.0&format=swagger'
+api_key = '1Eb4Xlt/hEHMLP0rCU87K7bVZg5Hep3RjNxleM6VViyzURt8SoJ4oMVNaW86IzIZ9/dY7R88jCDhwox9sNn07w=='
 headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
 
 req = urllib.request.Request(url, body, headers)
