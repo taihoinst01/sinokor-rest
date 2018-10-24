@@ -213,4 +213,60 @@ router.post('/train', function (req, res) {
     }
 });
 
+// 데이터 롤백 후 학습
+router.post('/rollbackTrain', function (req, res) {
+    commMoudle.addLogging(req, JSON.stringify(req.body));
+    //var flmdata = req.body.flmdata;
+    var fmData = req.body.fmData;
+    var cmData;
+    if (typeof req.body.cmData == 'string') {
+        cmData = JSON.parse(req.body.cmData);
+    } else {
+        cmData = req.body.cmData;
+    }
+    //var dataArr = [flmdata, fmData, cmData];
+    var dataArr = [fmData, cmData]
+    //var csvPathArr = ['formLabelMapping.csv','formMapping.csv','columnMapping.csv'];
+    var csvPathArr = ['formMapping.csv', 'columnMapping.csv'];
+
+    try {
+        for (var i in dataArr) {
+            var trainData = dataArr[i];
+            if (trainData.length != 0) {
+                var csvPath = require('app-root-path').path + '\\uploads\\trainData\\' + csvPathArr[i];
+                var writer = csvWriter();
+                writer = csvWriter({ headers: ['DATA', 'CLASS'] });
+                writer.pipe(commMoudle.fs.createWriteStream(csvPath, { flags: 'w' }));
+
+                if (csvPathArr[i] == 'formMapping.csv') {
+                    for (var i = 0; i < trainData.length; i++) {
+                        var item = trainData[i];
+                        writer.write({
+                            DATA: "''" + item.DATA + "'",
+                            CLASS: item.CLASS,
+                        });
+
+                    }
+                } else {
+                    for (var i = 0; i < trainData.length; i++) {
+                        var item = trainData[i];
+                        writer.write({
+                            DATA: "''" + item.DATA + "'",
+                            CLASS: item.CLASS
+                        });
+
+                    }
+                }
+                writer.end();
+                commMoudle.addLogging(req, 'Machine Learning ReTrain Success.')
+            }
+        }
+
+        res.send({ code: 200, message: 'Machine Learning ReTrain Success.' });
+    } catch (e) {
+        console.log(e);
+        res.send({ code: 500, message: e });
+    }
+});
+
 module.exports = router;
