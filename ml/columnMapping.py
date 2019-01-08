@@ -13,9 +13,9 @@ data = {
 body = str.encode(json.dumps(data))
 
 #url = 'https://ussouthcentral.services.azureml.net/workspaces/df3c2edb78144329b9b5e02a6b6b39ff/services/ed0dab8c1b7849a5ad2ab18f8eb110ff/execute?api-version=2.0&format=swagger' #free
-url = 'https://ussouthcentral.services.azureml.net/workspaces/42c22f7e4cbb4185bdc018321a7a4ef3/services/f4cac61ca9244994a4620571ca476367/execute?api-version=2.0&format=swagger'
+url = 'https://ussouthcentral.services.azureml.net/workspaces/70851972a88440bfb9e055f56add06b5/services/eaf3bd61058049a180641f2ff24c24ce/execute?api-version=2.0&format=swagger'
 #api_key = '1Eb4Xlt/hEHMLP0rCU87K7bVZg5Hep3RjNxleM6VViyzURt8SoJ4oMVNaW86IzIZ9/dY7R88jCDhwox9sNn07w==' #free
-api_key = 'Rcc4K2lcZ19Ft60KIUv5QWkFsTxu0GGLXSjB8zHAU27ayDS/C7ZRt5ZvoWo+cj9nORmGy2vbEJKfL3d4vGWT2g=='
+api_key = 'wvwb+6ObJmhsNaLQIuKPf/IVViSitHTn1fOZDqK5JHOC1rFxVXviPt5BEYqyTpnsX6G/PzhyFYyvexkL67qVVg=='
 headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
 
 req = urllib.request.Request(url, body, headers)
